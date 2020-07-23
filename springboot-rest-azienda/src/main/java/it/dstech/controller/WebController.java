@@ -16,10 +16,13 @@ public class WebController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value = "public/registrazione", method = RequestMethod.POST)
+	@RequestMapping(value = "/public/registrazione", method = RequestMethod.POST)
 	public @ResponseBody boolean registrazione(@RequestBody User user) {
 		userService.save(user);
 		return true;
 	}
 
+	
+	
+	
 }

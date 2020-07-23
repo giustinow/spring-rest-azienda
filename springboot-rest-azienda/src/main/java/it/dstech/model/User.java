@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -16,8 +18,11 @@ import javax.persistence.Table;
 @Table(name = "USERS")
 public class User {
 
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", unique = true)
+    private Long id;
+    
     @Column(name = "USERNAME", length = 50, unique = true)
     private String username;
 
@@ -25,7 +30,7 @@ public class User {
     private String password;
 
     @Column(name = "ENABLED")
-private Boolean enabled;
+    private Boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -34,7 +39,7 @@ private Boolean enabled;
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
     private List<Authority> authorities;
     
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Servizio> listaServizi;
 
 
@@ -77,6 +82,14 @@ private Boolean enabled;
 
 	public void setListaServizi(List<Servizio> listaServizi) {
 		this.listaServizi = listaServizi;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 

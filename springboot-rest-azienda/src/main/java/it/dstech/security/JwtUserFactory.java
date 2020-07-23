@@ -10,6 +10,8 @@ import it.dstech.model.Authority;
 import it.dstech.model.User;
 import it.dstech.security.dto.JwtUser;
 
+
+
 public class JwtUserFactory {
 	 private JwtUserFactory() {
 	    }

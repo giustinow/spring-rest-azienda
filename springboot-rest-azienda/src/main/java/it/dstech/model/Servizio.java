@@ -1,5 +1,7 @@
 package it.dstech.model;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.ManyToMany;
 
 @Entity
 public class Servizio {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -20,7 +23,7 @@ public class Servizio {
 	private String descrizione;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
-	private User user;
+	private List<User> user;
 
 	public Long getId() {
 		return id;
@@ -53,4 +56,14 @@ public class Servizio {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
+
+	public List<User> getUser() {
+		return user;
+	}
+
+	public void setUser(List<User> user) {
+		this.user = user;
+	}
+	
+	
 }

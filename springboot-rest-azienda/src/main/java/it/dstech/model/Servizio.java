@@ -20,10 +20,22 @@ public class Servizio {
 	
 	private int quantita;
 	
+	private int quantitàDisponibile;
+	
 	private String descrizione;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<User> user;
+
+	
+	
+	public int getQuantitàDisponibile() {
+		return quantitàDisponibile;
+	}
+
+	public void setQuantitàDisponibile(int quantitàDisponibile) {
+		this.quantitàDisponibile = quantitàDisponibile;
+	}
 
 	public Long getId() {
 		return id;

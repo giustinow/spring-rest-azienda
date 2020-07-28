@@ -1,19 +1,25 @@
 package it.dstech.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import it.dstech.model.Authority;
+import it.dstech.model.AuthorityName;
+import it.dstech.model.Servizio;
 import it.dstech.security.JwtAuthenticationRequest;
 import it.dstech.security.JwtTokenUtil;
 import it.dstech.service.JwtAuthenticationResponse;
+import it.dstech.service.ServizioService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,9 +43,11 @@ public class AuthenticationRestController {
     @Autowired
     private UserDetailsService userDetailsService;
     
-
+    @Autowired
+    private ServizioService servizioService;
+    
     @RequestMapping(value = "public/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device, HttpServletResponse response) throws AuthenticationException, JsonProcessingException {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,  HttpServletResponse response) throws AuthenticationException, JsonProcessingException {
 
         // Effettuo l autenticazione
         final Authentication authentication = authenticationManager.authenticate(
@@ -53,7 +61,7 @@ public class AuthenticationRestController {
 
         // Genero Token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails, device);
+        final String token = jwtTokenUtil.generateToken(userDetails);
         
         response.setHeader(tokenHeader, token);
         // Ritorno il token
@@ -76,5 +84,25 @@ public class AuthenticationRestController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+    
+    @RequestMapping(value = "protected/creaServizio", method = RequestMethod.POST)
+    public boolean creaServizio(@RequestBody Servizio servizio,HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader(tokenHeader);
+       System.out.println(token);
+Authority authority = new Authority(); 
+
+        authority.getName();
+        for (GrantedAuthority authority2:jwtTokenUtil.getUserDetails(token).getAuthorities()) {
+		if (authority2.getAuthority().equals("ROLE_ADMIN"))  {
+       
+servizioService.save(servizio);
+            return true;
+		}
+        } 
+            return false;
+        
+    }
+    
+    
 
 }

@@ -113,6 +113,35 @@ public class AuthenticationRestController {
 		return servizioService.listaServizi();
 	}
 	
+	
+	@RequestMapping(value = "protected/modificaServizio", method = RequestMethod.POST)
+	public boolean modificaServio(@RequestBody Servizio servizio, HttpServletRequest request, HttpServletResponse response) {
+		String token = request.getHeader(tokenHeader);
+		Authority authority = new Authority();
+		authority.getName();
+		for (GrantedAuthority authority2 : jwtTokenUtil.getUserDetails(token).getAuthorities()) {
+			if (authority2.getAuthority().equals("ROLE_ADMIN")) {
+				servizioService.save(servizio);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@RequestMapping(value = "protected/eliminaServizio", method = RequestMethod.POST)
+	public boolean eliminaServizio(@RequestBody Long idServizio, HttpServletRequest request, HttpServletResponse response) {
+		String token = request.getHeader(tokenHeader);
+		Authority authority = new Authority();
+		authority.getName();
+		for (GrantedAuthority authority2 : jwtTokenUtil.getUserDetails(token).getAuthorities()) {
+			if (authority2.getAuthority().equals("ROLE_ADMIN")) {
+				servizioService.delete(idServizio);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@RequestMapping(value = "protected/prenotaServizio", method = RequestMethod.POST)
 	public boolean prenotaServizio(@RequestBody Servizio servizio, HttpServletRequest request,
 			HttpServletResponse response) {
